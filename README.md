@@ -1,6 +1,6 @@
 # [translate api](https://translate.tarsislima.com)
 
-Just "any" language
+Just translate "any" language
 
 ## how to run
 
