@@ -9,6 +9,9 @@ def make_error(error_message = ""):
 def make_ok(data = {}):
   return json.dumps({ "status": "ok", "message": None, "data": data })
 
+def translate(text):
+  return argostranslate.translate.translate(text, 'en', 'pt')
+
 # argostranslate
 available_packages = argostranslate.package.get_available_packages()
 package_to_install = next(
@@ -31,21 +34,24 @@ def apiv1():
 @app.get("/api/v1/translate")
 def translate_get():
   resp = make_response()
-  resp.data = make_ok({ "text": request.args.get("text") })
+  text = request.args.get("text")
+  resp.data = make_ok({ "text": text, "translated": translate(text) })
   return resp
 
 @app.post("/api/v1/translate")
 def translate_post():
   json_data = request.get_json()
+  text = "none" if json_data is None else json_data["text"]
   resp = make_response()
   if request.headers["Content-Type"] != "application/json":
     resp.data = make_error("Not a JSON request")
   else:
-    resp.data = make_ok({ "text": "none" if json_data is None else json_data["text"] })
+    resp.data = make_ok({ "text": text, "translated": translate(text) })
   return resp
 
 @app.post("/api/v1/languages")
 def languages_post():
+  languages = argostranslate.translate.get_installed_languages()
   resp = make_response()
-  resp.data = make_ok({ "languages": list() })
+  resp.data = make_ok({ "languages": languages })
   return resp
