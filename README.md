@@ -11,5 +11,7 @@ python -m flask --app main run
 ## how to request
 
 ```bash
-curl -X POST "http://127.0.0.1:5000/api/v1/translate"
+curl -X POST "http://0.0.0.0:5000/api/v1/translate" \
+  --header "Content-Type: application/json" \
+  --data-raw '{"text":"hello"}' 
 ```
